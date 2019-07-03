@@ -4,9 +4,12 @@ const Bot = new Discord.Client();
 const config = require("./settings.json");
 Bot.status = 1;
 
+var prefix = "!";
+
 Bot.on("message", (message) => {
-    if(message.content == "ping") {
-        message.reply("lol");
+    if(message.content.startsWith(prefix + "test"))
+    {
+        message.channel.send("Das works!");
     }
 });
 
