@@ -1,5 +1,3 @@
-socket = io.listen(process.env.PORT);
-
 const Discord = require("discord.js");
 const Bot = new Discord.Client();
 
