@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const Bot = new Discord.Client();
-
+var port = process.env.PORT || 8080;
 const config = require("./settings.json");
 Bot.status = 1;
 
