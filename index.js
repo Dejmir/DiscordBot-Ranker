@@ -1,20 +1,16 @@
 const Discord = require("discord.js");
+const Command = require("discord.js-commando");
+const ms = require("ms");
 const Bot = new Discord.Client();
+const cm = new Command.Client();
 
 var prefix = "!";
 
 Bot.on("ready", () => {
-  Bot.user.setActivity("", "STREAMING");
+  Bot.user.setActivity("!help to use", "STREAMING");
 });
 
-Bot.on("message", (message) => {
-    if(message.content.startsWith(prefix + "test"))
-    {
-        message.channel.send("Das works!");
-    }
-});
-
-const embed = {
+  const embed = {
     "color": 111,
     "footer": {
       "icon_url": "https://cdn.discordapp.com/avatars/596058033180639238/2227b5c66343451b714a2dde8d920572.png"
@@ -26,7 +22,11 @@ const embed = {
     },
     "fields": [
       {
-        "name": "Wtf z tą wersją drugą ?",
+        "name": "Bot owner/programmer",
+        "value": "Nick: Daniel#1003 Id: 335454224886267914"
+      },
+      {
+        "name": "Druga wersja ?",
         "value": "A no bo druga wersja jest napisana w innym języku dlatego jest v2"
       },
       {
@@ -35,16 +35,99 @@ const embed = {
       },
       {
         "name": "Status ukończenia bota",
-        "value": "5% (W przybliżeniu)"
+        "value": "18% (W przybliżeniu)"
       }
     ]
   };
 
-Bot.on("message", (message) => {
+  Bot.on("message", (message) => {
+    //RANK COMMAND
+    //
+    //
+    //
+    //
+    //
+    var RCommand = "rank";
+
+    if(message.content.startsWith(prefix + RCommand))
+    {
+      if(message.member.hasPermission("ADMINISTRATOR"))
+      {
+        let userR = message.guild.member(message.mentions.users.first());
+        const args = message.content.slice(prefix.length).trim().split(/ +/g);
+        const command = args.shift().toLowerCase();
+        let rank = args[2];
+        let time = args[1]
+        if(!userR) return message.channel.send("Nie znaleziono takiego użytkownika");
+        if(!rank) return message.channel.send("Błąd");
+        if(!time) return message.channel.send("Błąd");
+        var vtime = time;
+        time = time * 60000;
+
+        var role = message.guild.roles.find("name", rank);
+        role;
+        //message.channel.send(rank);
+        //message.channel.send(`${role}`);
+        if(!role) return message.channel.send("Błąd")
+        userR.addRole(role).catch(err => {
+          message.channel.send("Error");
+        });
+        message.channel.send(`${userR} dostał range: ${rank} na: ${vtime} minut/y`);
+        setTimeout(function(){
+          userR.removeRole(role);
+          message.channel.send(`${userR} Została zabrana ranga: ${role}`);
+        }, (time));
+      }
+      else{
+        message.reply("Nie masz uprawnień");
+      }
+    }
+    //BAN COMMAND
+    //
+    //
+    //
+    //
+    //
+    if(message.content.startsWith(prefix + "ban"))
+  
+    if(message.member.hasPermission("BAN_MEMBERS"))
+    {
+      const args = message.content.split(' ').slice(1);
+      const user = message.mentions.users.first();
+      var banReason = args.slice(1).join(' ');
+      if(!user)
+      {
+        message.channel.send("Poprawne użycie komendy: !ban @użytkownik PowódOpcjonalny")
+      }
+      banReason += "Brak podanego powodu";
+      message.guild.ban(user, banReason).then(() => {
+          message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
+      }).catch(err => {
+          message.channel.send("Błąd");
+          console.log(err);
+      });
+      //TEST
+      //
+      //
+      //
+      //
+      //
+    }
+      if(message.content.startsWith(prefix + "test"))
+      {
+        message.channel.send("Das works!");
+      }
+      //HELP
+      //
+      //
+      //
+      //
+      //
     if(message.content.startsWith(prefix + "help"))
     {
-      var authorr = message.author.id;
-      if(authorr == 3354542248862679140)
+      var authorr = message.member.id;
+      //message.channel.send(authorr);
+      if(authorr == 335454224886267914)
       {
         message.channel.send("Select language !").then(async msg => {
           var pl = await msg.react("🇵🇱");
@@ -52,23 +135,23 @@ Bot.on("message", (message) => {
           pl;
           us;
           await msg.react("🤔");
-          for (let index = 0; index < 3500; index++) {
-            console.log(pl.count);
-          
+          for (let index = 0; index < 4500; index++) {
+              console.log(pl.count);
+            
           }
           await msg.react("❓");
           for (let index = 0; index < 500; index++) {
             console.log(pl.content)
-          
+            
           }
-
-          const reactions = message.awaitReactions(reactions => {
+  
+            const reactions = message.awaitReactions(reactions => {
             return reaction.emoji.name === "🇵🇱" ||
             reaction.emoji.name === "🇺🇸"
           });
-        
+          
           //message.channel.send(pl.count);
-
+  
           if(pl.count > 1)
           {
             msg.edit({embed});
@@ -76,57 +159,18 @@ Bot.on("message", (message) => {
           }
           if(us.count > 1)
           {
-            message.channel.send("Stany zjednoczone");
+            message.channel.send("This bot is only for polish people ;)").then(async msg2 => {
+              setTimeout(function(){
+                msg2.delete();
+              }, (6000));
+            })
+            setTimeout(function(){
+              msg.delete();
+            }, (6000));
           }
         })
       }
-    }
-  });
-
-  Bot.on("message", (message) => {
-    var RCommand = "rank";
-
-    if(message.content.startsWith(prefix + RCommand))
-    {
-      if(message.member.hasPermission("KICK_MEMBERS"))
-      {
-        const args = message.content.slice(prefix.length).split(' ');
-
-        let user = message.guild.member(message.mentions.users.first());
-        let rank = args.join("").slice(22);
-        if(!user) return message.channel.send("Nie można znaleźć takiego użytkownika");
-
-        //const args = message.content.slice(prefix.length).split(' ');
-        const command = args.shift().toLowerCase();
-        
-        var role = message.guild.roles.find("name", `${rank.substr(3)}`);
-        role;
-        user.addRole(`${role.id}`);
-        message.channel.send(`Command name: ${command}\nArguments: ${args}`);
-      }
-      else{
-        message.reply("Nie masz uprawnień");
-      }
-    }
-    Bot.on("message", (message) => {
-      if(message.content.startsWith(prefix + "ban"))
-      {
-        if(message.member.hasPermission("BAN_MEMBERS"))
-        {
-          const args = message.content.split(' ').slice(1);
-          const user = message.mentions.users.first();
-          var banReason = args.slice(1).join(' ');
-          banReason += "Brak podanego powodu";
-          message.guild.ban(user, banReason).then(() => {
-              message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
-          }).catch(err => {
-              //message.reply("Nie udało się zbanować tego użytkownika");
-              console.log(err);
-          });
-          //message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
-        }
-      }
-  });
+  }
 });
 
 Bot.login(process.env.token);
