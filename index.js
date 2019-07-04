@@ -127,23 +127,13 @@ Bot.on("ready", () => {
       //message.channel.send(authorr);
       if(authorr == 335454224886267914)
       {
-        message.channel.send("Select language !").then(async msg => {
+        message.channel.send("Select language ! in 5 sec").then(async msg => {
           var pl = await msg.react("🇵🇱");
           var us = await msg.react("🇺🇸");
           pl;
           us;
           await msg.react("🤔");
-          for (let index = 0; index < 15000; index++) {
-              console.log(pl.count);
-            setTimeout(function(){
-              var a = "a";
-            }, (6000));
-          }
           await msg.react("❓");
-          for (let index = 0; index < 500; index++) {
-            console.log(pl.content)
-            
-          }
   
             const reactions = message.awaitReactions(reactions => {
             return reaction.emoji.name === "🇵🇱" ||
@@ -151,23 +141,26 @@ Bot.on("ready", () => {
           });
           
           //message.channel.send(pl.count);
-  
-          if(pl.count > 1)
-          {
-            msg.edit({embed});
-            msg.clearReactions();
-          }
-          if(us.count > 1)
-          {
-            message.channel.send("This bot is only for polish people ;)").then(async msg2 => {
+            
+          setTimeout(function(){
+            if(pl.count > 1)
+            {
+              msg.edit({embed});
+              msg.clearReactions();
+            }
+            if(us.count > 1)
+            {
+              message.channel.send("This bot is only for polish people ;)").then(async msg2 => {
+                setTimeout(function(){
+                  msg2.delete();
+                }, (6000));
+              })
               setTimeout(function(){
-                msg2.delete();
+                msg.delete();
               }, (6000));
-            })
-            setTimeout(function(){
-              msg.delete();
-            }, (6000));
-          }
+            }
+            
+          }, (5000));
         })
       }
   }
