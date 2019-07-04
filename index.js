@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
-const Command = require("discord.js-commando");
 const Bot = new Discord.Client();
-const cm = new Command.Client();
 
 var prefix = "!";
 
