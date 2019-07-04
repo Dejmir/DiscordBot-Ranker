@@ -133,7 +133,7 @@ Bot.on("ready", () => {
           pl;
           us;
           await msg.react("🤔");
-          for (let index = 0; index < 4500; index++) {
+          for (let index = 0; index < 15000; index++) {
               console.log(pl.count);
             
           }
