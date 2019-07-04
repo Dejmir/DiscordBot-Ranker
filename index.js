@@ -1,10 +1,12 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
+const Command = require("discord.js-commando");
 const Bot = new Discord.Client();
+const cm = new Command.Client();
 
 var prefix = "!";
 
 Bot.on("ready", () => {
-  Bot.user.setActivity("!help", "STREAMING");
+  Bot.user.setActivity("", "STREAMING");
 });
 
 Bot.on("message", (message) => {
@@ -82,5 +84,51 @@ Bot.on("message", (message) => {
       }
     }
   });
+
+  Bot.on("message", (message) => {
+    var RCommand = "rank";
+
+    if(message.content.startsWith(prefix + RCommand))
+    {
+      if(message.member.hasPermission("KICK_MEMBERS"))
+      {
+        const args = message.content.slice(prefix.length).split(' ');
+
+        let user = message.guild.member(message.mentions.users.first());
+        let rank = args.join("").slice(22);
+        if(!user) return message.channel.send("Nie można znaleźć takiego użytkownika");
+
+        //const args = message.content.slice(prefix.length).split(' ');
+        const command = args.shift().toLowerCase();
+        
+        var role = message.guild.roles.find("name", `${rank.substr(3)}`);
+        role;
+        user.addRole(`${role.id}`);
+        message.channel.send(`Command name: ${command}\nArguments: ${args}`);
+      }
+      else{
+        message.reply("Nie masz uprawnień");
+      }
+    }
+    Bot.on("message", (message) => {
+      if(message.content.startsWith(prefix + "ban"))
+      {
+        if(message.member.hasPermission("BAN_MEMBERS"))
+        {
+          const args = message.content.split(' ').slice(1);
+          const user = message.mentions.users.first();
+          var banReason = args.slice(1).join(' ');
+          banReason += "Brak podanego powodu";
+          message.guild.ban(user, banReason).then(() => {
+              message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
+          }).catch(err => {
+              //message.reply("Nie udało się zbanować tego użytkownika");
+              console.log(err);
+          });
+          //message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
+        }
+      }
+  });
+});
 
 Bot.login(process.env.token);
