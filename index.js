@@ -135,7 +135,9 @@ Bot.on("ready", () => {
           await msg.react("🤔");
           for (let index = 0; index < 15000; index++) {
               console.log(pl.count);
-            
+            setTimeout(function(){
+              var a = "a";
+            }, (6000));
           }
           await msg.react("❓");
           for (let index = 0; index < 500; index++) {
