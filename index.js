@@ -4,7 +4,7 @@ const Bot = new Discord.Client();
 var prefix = "!";
 
 Bot.on("ready", () => {
-  Bot.user.setActivity("!help", "STREAMING");
+  Bot.user.setActivity("J3BAĆ PiS", "STREAMING");
 });
 
 Bot.on("message", (message) => {
@@ -79,6 +79,10 @@ Bot.on("message", (message) => {
             message.channel.send("Stany zjednoczone");
           }
         })
+      }
+      else
+      {
+        message.channel.send("Nic tu jescze nie ma");
       }
     }
   });
