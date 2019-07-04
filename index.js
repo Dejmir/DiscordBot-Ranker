@@ -6,7 +6,11 @@ const cm = new Command.Client();
 var prefix = "!";
 
 Bot.on("ready", () => {
+<<<<<<< HEAD
   Bot.user.setActivity("", "STREAMING");
+=======
+  Bot.user.setActivity("J3BAĆ PiS", "STREAMING");
+>>>>>>> 5a4e987cabfb08172175265201fc2599c5757d89
 });
 
 Bot.on("message", (message) => {
@@ -81,6 +85,10 @@ Bot.on("message", (message) => {
             message.channel.send("Stany zjednoczone");
           }
         })
+      }
+      else
+      {
+        message.channel.send("Nic tu jescze nie ma");
       }
     }
   });
