@@ -125,7 +125,7 @@ Bot.on("ready", () => {
     {
       var authorr = message.member.id;
       //message.channel.send(authorr);
-      if(authorr == 335454224886267914)
+      if(335454224886267914 == 335454224886267914)
       {
         message.channel.send("Select language ! in 5 sec").then(async msg => {
           var pl = await msg.react("🇵🇱");
