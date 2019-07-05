@@ -52,6 +52,37 @@ Bot.on("ready", () => {
   };
 
   Bot.on("message", (message) => {
+    const embedBAN = {
+      "title": "Zostałeś zbanowany",
+      "color": 11601950,
+      "footer": {
+        "icon_url": "https://cdn.discordapp.com/avatars/596058033180639238/2227b5c66343451b714a2dde8d920572.png",
+        "text": "Ranker v2"
+      },
+      "thumbnail": {
+        "url": "https://images-ext-1.discordapp.net/external/P38ZImbsji0QoZVClCrmtjPPg48AEEkoUdqxqhEUZ3E/https/st.depositphotos.com/1031343/3818/v/950/depositphotos_38188327-stock-illustration-banned-stamp.jpg"
+      },
+      "fields": [
+        {
+          "name": "Serwer na jakim zostałeś zbanowany :",
+          "value": `${message.guild}`
+        },
+        {
+          "name": "Admin banujący :",
+          "value": `${message.member}`
+        },
+        {
+          "name": "Czas bana :",
+          "value": "Perm sorry"
+        },
+        {
+          "name": "Serdecznie pozdrawia cała administracja serwera",
+          "value": `${message.guild}`
+        }
+      ]
+    };
+    
+    
     //RANK COMMAND
     //
     //
@@ -133,17 +164,17 @@ Bot.on("ready", () => {
         const args = message.content.split(' ').slice(1);
         const user = message.mentions.users.first();
         var banReason = args.slice(1).join(' ');
-        if(!user)
-        {
-          message.channel.send("Poprawne użycie komendy: !ban @użytkownik PowódOpcjonalny")
-        }
-        message.channel.send(banReason);
+        if(!user) return message.channel.send("Poprawne użycie komendy: !ban @użytkownik Powód Opcjonalny")
+        if(user.id == message.author.id) return message.channel.send("Nie możesz zbanować samego siebie 😇")
+        //message.channel.send(banReason);
         if(banReason == "")
         {
           banReason += "Brak podanego powodu";
         }
         message.guild.ban(user, banReason).then(() => {
             message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
+            user.createDM();
+            user.sendEmbed(embedBAN);
         }).catch(err => {
             message.channel.send("Błąd");
             console.log(err);
@@ -208,7 +239,7 @@ Bot.on("ready", () => {
           }, (5200));
         })
       }
-  }
+    }
 });
 
 Bot.login(process.env.token);
