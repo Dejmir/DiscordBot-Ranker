@@ -162,7 +162,7 @@ Bot.on("ready", () => {
       if(message.member.hasPermission("BAN_MEMBERS"))
       {
         const args = message.content.split(' ').slice(1);
-        const user = message.mentions.users.first();
+        const user = args[0];
         var banReason = args.slice(1).join(' ');
         if(!user) return message.channel.send("Poprawne użycie komendy: !ban @użytkownik Powód Opcjonalny")
         if(user.id == message.author.id) return message.channel.send("Nie możesz zbanować samego siebie 😇")
