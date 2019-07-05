@@ -162,7 +162,7 @@ Bot.on("ready", () => {
       if(message.member.hasPermission("BAN_MEMBERS"))
       {
         const args = message.content.split(' ').slice(1);
-        const user = args[0];
+        const user = message.mentions.users.first();
         var banReason = args.slice(1).join(' ');
         if(!user) return message.channel.send("Poprawne użycie komendy: !ban @użytkownik Powód Opcjonalny")
         if(user.id == message.author.id) return message.channel.send("Nie możesz zbanować samego siebie 😇")
@@ -171,10 +171,10 @@ Bot.on("ready", () => {
         {
           banReason += "Brak podanego powodu";
         }
-        message.guild.ban(user, banReason).then(() => {
-            message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
             user.createDM();
             user.sendEmbed(embedBAN);
+        message.guild.ban(user, banReason).then(() => {
+            message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
         }).catch(err => {
             message.channel.send("Błąd");
             console.log(err);
@@ -185,6 +185,19 @@ Bot.on("ready", () => {
         //
         //
         //
+      }
+    }
+    if(message.content.startsWith(prefix + "idban"))
+    {
+      if(message.member.hasPermission("BAN_MEMBERS"))
+      {
+        const args = message.content.split(' ').slice(1);
+        const user = args[0];
+        if(!user) return message.channel.send("Poprawne użycie komendy: !ban 123456789012345678")
+        if(user == message.author.id) return message.channel.send("Nie możesz zbanować samego siebie 😇")
+        message.guild.ban(user, banReason).then(() => {
+            message.channel.send(`Użytkownik o ID : ${user} został zbanowany.`);
+        });
       }
     }
       if(message.content.startsWith(prefix + "test"))
