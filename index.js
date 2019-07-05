@@ -1,12 +1,24 @@
 const Discord = require("discord.js");
 const ms = require("ms");
 const Bot = new Discord.Client();
-const cm = new Command.Client();
 
-var prefix = "!";
+var prefix = "r!";
 
 Bot.on("ready", () => {
-  Bot.user.setActivity("!help to use", "STREAMING");
+  Bot.user.setActivity("Owner: DanieL#1003", "STREAMING");
+  var x = 1;
+  setInterval(function(){
+    if(x == 1)
+    {
+      Bot.user.setActivity("r!help", "STREAMING");
+      x = 0;
+    }
+    else if(x == 0)
+    {
+      Bot.user.setActivity("Owner: DanieL#1003", "STREAMING");
+      x = 1;
+    }
+  }, (8000))
 });
 
   const embed = {
@@ -34,7 +46,7 @@ Bot.on("ready", () => {
       },
       {
         "name": "Status ukończenia bota",
-        "value": "18% (W przybliżeniu)"
+        "value": "23% (W przybliżeniu)"
       }
     ]
   };
@@ -48,15 +60,23 @@ Bot.on("ready", () => {
     //
     var RCommand = "rank";
 
-    if(message.content.startsWith(prefix + RCommand))
+    if(message.content == prefix + RCommand)
     {
       if(message.member.hasPermission("ADMINISTRATOR"))
       {
         let userR = message.guild.member(message.mentions.users.first());
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
-        let rank = args[2];
+        if(args[3] === undefined)
+        {
+          var rank = args[2];
+        }
+        else
+        {
+          var rank = args[2] + " " + args[3];
+        }
         let time = args[1]
+        //message.channel.send(`dev log]] ${rank}`);
         if(!userR) return message.channel.send("Nie znaleziono takiego użytkownika");
         if(!rank) return message.channel.send("Błąd");
         if(!time) return message.channel.send("Błąd");
@@ -68,14 +88,33 @@ Bot.on("ready", () => {
         //message.channel.send(rank);
         //message.channel.send(`${role}`);
         if(!role) return message.channel.send("Błąd")
-        userR.addRole(role).catch(err => {
-          message.channel.send("Error");
-        });
-        message.channel.send(`${userR} dostał range: ${rank} na: ${vtime} minut/y`);
-        setTimeout(function(){
+
+        if(userR.roles.has(role.id))
+        {
           userR.removeRole(role);
           message.channel.send(`${userR} Została zabrana ranga: ${role}`);
-        }, (time));
+        }
+        else
+        {
+          if(vtime < 1)
+          {
+            userR.addRole(role).catch(err => {
+              message.channel.send("Error");
+            });
+            message.channel.send(`${userR} dostał range: ${rank}.`);
+          }
+          else
+          {
+            userR.addRole(role).catch(err => {
+              message.channel.send("Error");
+            });
+            message.channel.send(`${userR} dostał range: ${rank} na: ${vtime} minut/y`);
+            setTimeout(function(){
+              userR.removeRole(role);
+              message.channel.send(`${userR} Została zabrana ranga: ${role}`);
+            }, (time));
+          }
+        }  
       }
       else{
         message.reply("Nie masz uprawnień");
@@ -87,7 +126,7 @@ Bot.on("ready", () => {
     //
     //
     //
-    if(message.content.startsWith(prefix + "ban"))
+    if(message.content == prefix + "ban")
   
     if(message.member.hasPermission("BAN_MEMBERS"))
     {
@@ -98,7 +137,11 @@ Bot.on("ready", () => {
       {
         message.channel.send("Poprawne użycie komendy: !ban @użytkownik PowódOpcjonalny")
       }
-      banReason += "Brak podanego powodu";
+      message.channel.send(banReason);
+      if(banReason == "")
+      {
+        banReason += "Brak podanego powodu";
+      }
       message.guild.ban(user, banReason).then(() => {
           message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
       }).catch(err => {
@@ -112,7 +155,7 @@ Bot.on("ready", () => {
       //
       //
     }
-      if(message.content.startsWith(prefix + "test"))
+      if(message.content == prefix + "test")
       {
         message.channel.send("Das works!");
       }
@@ -122,27 +165,19 @@ Bot.on("ready", () => {
       //
       //
       //
-    if(message.content.startsWith(prefix + "help"))
+    if(message.content == prefix + "help")
     {
       var authorr = message.member.id;
       //message.channel.send(authorr);
       if(authorr == 335454224886267914)
       {
-        message.channel.send("Select language !").then(async msg => {
+        message.channel.send("Select language ! in 5 sec").then(async msg => {
           var pl = await msg.react("🇵🇱");
           var us = await msg.react("🇺🇸");
           pl;
           us;
           await msg.react("🤔");
-          for (let index = 0; index < 4500; index++) {
-              console.log(pl.count);
-            
-          }
           await msg.react("❓");
-          for (let index = 0; index < 500; index++) {
-            console.log(pl.content)
-            
-          }
   
             const reactions = message.awaitReactions(reactions => {
             return reaction.emoji.name === "🇵🇱" ||
@@ -150,23 +185,26 @@ Bot.on("ready", () => {
           });
           
           //message.channel.send(pl.count);
-  
-          if(pl.count > 1)
-          {
-            msg.edit({embed});
-            msg.clearReactions();
-          }
-          if(us.count > 1)
-          {
-            message.channel.send("This bot is only for polish people ;)").then(async msg2 => {
+            
+          setTimeout(function(){
+            if(pl.count > 1)
+            {
+              msg.edit({embed});
+              msg.clearReactions();
+            }
+            if(us.count > 1)
+            {
+              message.channel.send("This bot is only for polish people ;)").then(async msg2 => {
+                setTimeout(function(){
+                  msg2.delete();
+                }, (6000));
+              })
               setTimeout(function(){
-                msg2.delete();
+                msg.delete();
               }, (6000));
-            })
-            setTimeout(function(){
-              msg.delete();
-            }, (6000));
-          }
+            }
+            
+          }, (5200));
         })
       }
   }
