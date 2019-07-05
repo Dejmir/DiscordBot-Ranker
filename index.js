@@ -54,8 +54,16 @@ Bot.on("ready", () => {
         let userR = message.guild.member(message.mentions.users.first());
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
         const command = args.shift().toLowerCase();
-        let rank = args[2];
+        if(args[3] === undefined)
+        {
+          var rank = args[2];
+        }
+        else
+        {
+          var rank = args[2] + " " + args[3];
+        }
         let time = args[1]
+        //message.channel.send(`dev log]] ${rank}`);
         if(!userR) return message.channel.send("Nie znaleziono takiego użytkownika");
         if(!rank) return message.channel.send("Błąd");
         if(!time) return message.channel.send("Błąd");
@@ -125,7 +133,7 @@ Bot.on("ready", () => {
     {
       var authorr = message.member.id;
       //message.channel.send(authorr);
-      if(335454224886267914 == 335454224886267914)
+      if(authorr == 335454224886267914)
       {
         message.channel.send("Select language ! in 5 sec").then(async msg => {
           var pl = await msg.react("🇵🇱");
@@ -160,7 +168,7 @@ Bot.on("ready", () => {
               }, (6000));
             }
             
-          }, (5000));
+          }, (5200));
         })
       }
   }
