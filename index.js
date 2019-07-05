@@ -5,7 +5,7 @@ const Bot = new Discord.Client();
 var prefix = "!";
 
 Bot.on("ready", () => {
-  Bot.user.setActivity("!help to use", "STREAMING");
+  Bot.user.setActivity("Owner: DanieL#1003", "STREAMING");
 });
 
   const embed = {
