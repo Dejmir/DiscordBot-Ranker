@@ -6,7 +6,6 @@ var prefix = "r!";
 
 Bot.on("ready", () => {
   Bot.user.setActivity("Owner: DanieL#1003", "STREAMING");
-
   var x = 1;
   setInterval(function(){
     if(x == 1)
@@ -61,7 +60,7 @@ Bot.on("ready", () => {
     //
     var RCommand = "rank";
 
-    if(message.content == prefix + RCommand)
+    if(message.content.startsWith(prefix + RCommand))
     {
       if(message.member.hasPermission("ADMINISTRATOR"))
       {
@@ -127,36 +126,37 @@ Bot.on("ready", () => {
     //
     //
     //
-    if(message.content == prefix + "ban")
-  
-    if(message.member.hasPermission("BAN_MEMBERS"))
+    if(message.content.startsWith(prefix + "ban"))
     {
-      const args = message.content.split(' ').slice(1);
-      const user = message.mentions.users.first();
-      var banReason = args.slice(1).join(' ');
-      if(!user)
+      if(message.member.hasPermission("BAN_MEMBERS"))
       {
-        message.channel.send("Poprawne użycie komendy: !ban @użytkownik PowódOpcjonalny")
+        const args = message.content.split(' ').slice(1);
+        const user = message.mentions.users.first();
+        var banReason = args.slice(1).join(' ');
+        if(!user)
+        {
+          message.channel.send("Poprawne użycie komendy: !ban @użytkownik PowódOpcjonalny")
+        }
+        message.channel.send(banReason);
+        if(banReason == "")
+        {
+          banReason += "Brak podanego powodu";
+        }
+        message.guild.ban(user, banReason).then(() => {
+            message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
+        }).catch(err => {
+            message.channel.send("Błąd");
+            console.log(err);
+        });
+        //TEST
+        //
+        //
+        //
+        //
+        //
       }
-      message.channel.send(banReason);
-      if(banReason == "")
-      {
-        banReason += "Brak podanego powodu";
-      }
-      message.guild.ban(user, banReason).then(() => {
-          message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
-      }).catch(err => {
-          message.channel.send("Błąd");
-          console.log(err);
-      });
-      //TEST
-      //
-      //
-      //
-      //
-      //
     }
-      if(message.content == prefix + "test")
+      if(message.content.startsWith(prefix + "test"))
       {
         message.channel.send("Das works!");
       }
@@ -166,7 +166,7 @@ Bot.on("ready", () => {
       //
       //
       //
-    if(message.content == prefix + "help")
+    if(message.content.startsWith(prefix + "help"))
     {
       var authorr = message.member.id;
       //message.channel.send(authorr);
