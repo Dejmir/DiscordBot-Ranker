@@ -6,6 +6,7 @@ var prefix = "r!";
 
 Bot.on("ready", () => {
   Bot.user.setActivity("Owner: DanieL#1003", "STREAMING");
+
   var x = 1;
   setInterval(function(){
     if(x == 1)
