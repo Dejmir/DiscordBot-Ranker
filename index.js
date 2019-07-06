@@ -107,7 +107,7 @@ Bot.on("ready", () => {
           var rank = args[2] + " " + args[3];
         }
         let time = args[1]
-        //message.channel.send(`dev log]] ${rank}`);
+        
         if(!userR) return message.channel.send("Nie znaleziono takiego użytkownika");
         if(!rank) return message.channel.send("Błąd");
         if(!time) return message.channel.send("Błąd");
@@ -116,8 +116,6 @@ Bot.on("ready", () => {
 
         var role = message.guild.roles.find("name", rank);
         role;
-        //message.channel.send(rank);
-        //message.channel.send(`${role}`);
         if(!role) return message.channel.send("Błąd")
 
         if(userR.roles.has(role.id))
@@ -166,19 +164,21 @@ Bot.on("ready", () => {
         var banReason = args.slice(1).join(' ');
         if(!user) return message.channel.send("Poprawne użycie komendy: !ban @użytkownik Powód Opcjonalny")
         if(user.id == message.author.id) return message.channel.send("Nie możesz zbanować samego siebie 😇")
-        //message.channel.send(banReason);
+        if(!message.guild.member(user).bannable) return message.channel.send("Nie można zbanować tego użytkownika")
+        user.createDM();
+        user.sendEmbed(embedBAN);
         if(banReason == "")
         {
           banReason += "Brak podanego powodu";
         }
-            user.createDM();
-            user.sendEmbed(embedBAN);
-        message.guild.ban(user, banReason).then(() => {
+        setTimeout(function() {
+          message.guild.ban(user, banReason).then(() => {
             message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
         }).catch(err => {
             message.channel.send("Błąd");
             console.log(err);
         });
+        }, (1000))
         //TEST
         //
         //
