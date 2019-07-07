@@ -339,7 +339,7 @@ Bot.on('messageReactionAdd', (reaction, user) => {
     }
     if(message.content.startsWith(prefix + "komendy"))
       {
-        message.channel.send({embedcommands});
+        message.channel.sendEmbed(embedcommands);
       }
 });
 
