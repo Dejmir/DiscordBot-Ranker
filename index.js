@@ -37,8 +37,26 @@ Bot.on("roleDelete", async (role) => {
   await usere.send("Usuwanie ról jest zabronione, została tobie zdjęta ranga administratora");
   await usere.removeRoles(roles);
   await role.guild.createRole(role);
-  //role.guild.ban(user);
-})
+});
+Bot.on("roleUpdate", async (role) => {
+  const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
+  let user = ""
+  user = entry.executor.id
+  role
+  var usere = role.guild.member(user)
+  var roles = role.guild.roles;
+  var roleperm = role.permissions;
+  if(usere.hasPermission("ADMINISTRATOR")) return null;
+  if(o == 0) return null;
+  usere.createDM();
+  usere.send("Edytowanie ról jest zabronione, została tobie zdjęta ranga administratora");
+  usere.removeRoles(roles);
+  var o = 0;
+  await role.setPermissions(roleperm);
+  setTimeout(function() {
+    o = 1;
+  }, (1500))
+});
 
 Bot.on('messageReactionAdd', (reaction, user) => {
   console.log(`${user.username} reacted with "${reaction.emoji.name}".`);
@@ -286,7 +304,7 @@ Bot.on('messageReactionAdd', (reaction, user) => {
     }
       if(message.content.startsWith(prefix + "test"))
       {
-        message.channel.send("Das works!");
+        message.channel.send("Das works !");
       }
       //HELP
       //
