@@ -193,8 +193,8 @@ Bot.on('messageReactionAdd', (reaction, user) => {
           message.guild.ban(user, banReason).then(() => {
           message.channel.send(`${user} został zbanowany, powód: ${banReason}!`).then(async msg6 => {
             setTimeout(function() {
-              IDS = msg6.delete();
-            }, (8500))
+              if(BKR == 2) return msg6.delete();
+            }, (6700))
           });
 
           message.channel.send("Przypadkowy ban ? Kliknij w reakcje poniżej aby odbanować tę osobę").then(async msg => {
@@ -207,23 +207,20 @@ Bot.on('messageReactionAdd', (reaction, user) => {
               {
                 if(BKR == 2)
                 {
-                  setTimeout(function() {
                   message.guild.unban(user, "Przypadkowy ban");
                   msg.delete();
                   banbool = "false";
-                  }, (1000))
                 }
               }
-              msg.delete();
-            }, (6000))
-
+              
+            }, (5000))
             });
 
         }).catch(err => {
             message.channel.send("Błąd");
             console.log(err);
         });
-        }, (1000))
+        }, (250))
         //TEST
         //
         //
