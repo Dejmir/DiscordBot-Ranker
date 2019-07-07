@@ -25,6 +25,21 @@ Bot.on("ready", () => {
   }, (8000))
 });
 
+Bot.on("roleDelete", async (role) => {
+  const entry = await role.guild.fetchAuditLogs({type: "ROLE_DELETE"}).then(audit => audit.entries.first())
+  let user = ""
+  user = entry.executor.id
+  role
+  var usere = role.guild.member(user)
+  var roles = role.guild.roles;
+  if(usere.hasPermission("ADMINISTRATOR")) return null;
+  await usere.createDM();
+  await usere.send("Usuwanie ról jest zabronione, została tobie zdjęta ranga administratora");
+  await usere.removeRoles(roles);
+  await role.guild.createRole(role);
+  //role.guild.ban(user);
+})
+
 Bot.on('messageReactionAdd', (reaction, user) => {
   console.log(`${user.username} reacted with "${reaction.emoji.name}".`);
   if(banbool == "true")
@@ -57,11 +72,36 @@ Bot.on('messageReactionAdd', (reaction, user) => {
       },
       {
         "name": "Jakie są komendy ?",
-        "value": "Narazie żadne oprócz ''!help''"
+        "value": "r!komendy"
       },
       {
         "name": "Status ukończenia bota",
-        "value": "32% (W przybliżeniu)"
+        "value": "36% (W przybliżeniu)"
+      }
+    ]
+  };
+  const embedcommands = {
+    "color": 111,
+    "footer": {
+      "icon_url": "https://cdn.discordapp.com/avatars/596058033180639238/2227b5c66343451b714a2dde8d920572.png"
+    },
+    "author": {
+      "name": "Ranker",
+      "url": "https://discordapp.com",
+      "icon_url": "https://cdn.discordapp.com/avatars/596058033180639238/2227b5c66343451b714a2dde8d920572.png"
+    },
+    "fields": [
+      {
+        "name": "r!rank",
+        "value": "Użycie : r!rank @użytkownik 60 rola. Czas podawany jest w minutach."
+      },
+      {
+        "name": "r!ban",
+        "value": "Użycie : r!ban @użytkownik OpcjonalyPowód"
+      },
+      {
+        "name": "r!idban",
+        "value": "Użycie : r!idban 123456789012345678"
       }
     ]
   };
@@ -239,6 +279,8 @@ Bot.on('messageReactionAdd', (reaction, user) => {
         if(user == message.author.id) return message.channel.send("Nie możesz zbanować samego siebie 😇")
         message.guild.ban(user, banReason).then(() => {
             message.channel.send(`Użytkownik o ID : ${user} został zbanowany.`);
+        }).catch(err => {
+          message.channel.send(err);
         });
       }
     }
@@ -295,6 +337,10 @@ Bot.on('messageReactionAdd', (reaction, user) => {
         })
       }
     }
+    if(message.content.startsWith(prefix + "komendy"))
+      {
+        message.channel.send({embedcommands});
+      }
 });
 
 Bot.login(process.env.token);
