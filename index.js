@@ -3,6 +3,10 @@ const ms = require("ms");
 const Bot = new Discord.Client();
 
 var prefix = "r!";
+var banbool = "false";
+var IDob = "text";
+var BKR = "1";
+var IDS = "text";
 
 Bot.on("ready", () => {
   Bot.user.setActivity("Owner: DanieL#1003", "STREAMING");
@@ -19,6 +23,17 @@ Bot.on("ready", () => {
       x = 1;
     }
   }, (8000))
+});
+
+Bot.on('messageReactionAdd', (reaction, user) => {
+  console.log(`${user.username} reacted with "${reaction.emoji.name}".`);
+  if(banbool == "true")
+  {
+    if(user.id == IDob)
+    {
+      BKR = "2";
+    }
+  }
 });
 
   const embed = {
@@ -46,7 +61,7 @@ Bot.on("ready", () => {
       },
       {
         "name": "Status ukończenia bota",
-        "value": "23% (W przybliżeniu)"
+        "value": "32% (W przybliżeniu)"
       }
     ]
   };
@@ -171,9 +186,39 @@ Bot.on("ready", () => {
         {
           banReason += "Brak podanego powodu";
         }
+        IDob = message.member.id;
+        const LastMessage = message.member.lastMessage;
+
         setTimeout(function() {
           message.guild.ban(user, banReason).then(() => {
-            message.channel.send(`${user} został zbanowany, powód: ${banReason}!`);
+          message.channel.send(`${user} został zbanowany, powód: ${banReason}!`).then(async msg6 => {
+            setTimeout(function() {
+              IDS = msg6.delete();
+            }, (8500))
+          });
+
+          message.channel.send("Przypadkowy ban ? Kliknij w reakcje poniżej aby odbanować tę osobę").then(async msg => {
+            var ub = await msg.react("🆘");
+            ub;
+            //const reactions = await message.awaitReactions(reaction => reaction.content("🆘"));
+            banbool = "true"
+            setTimeout(function() {
+              if(ub.count > 1)
+              {
+                if(BKR == 2)
+                {
+                  setTimeout(function() {
+                  message.guild.unban(user, "Przypadkowy ban");
+                  msg.delete();
+                  banbool = "false";
+                  }, (1000))
+                }
+              }
+              msg.delete();
+            }, (6000))
+
+            });
+
         }).catch(err => {
             message.channel.send("Błąd");
             console.log(err);
