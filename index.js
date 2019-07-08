@@ -368,6 +368,20 @@ Bot.on('messageReactionAdd', (reaction, user) => {
       {
         message.channel.sendEmbed(embedcommands);
       }
+      
+    if(message.content.startsWith(prefix + "move"))
+    {
+      const args = message.content.split(' ').slice(1);
+      var targetch = args[0];
+
+      var voicech = message.member.voiceChannel;
+
+      voicech.members.forEach(element => {
+        //console.log(element);
+        message.guild.member(element).setVoiceChannel(`${targetch}`);
+      });
+
+    }
 });
 
 Bot.login(process.env.token);
