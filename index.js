@@ -36,23 +36,24 @@ Bot.on("roleDelete", async (role) => {
   role
   var usere = role.guild.member(user)
   var roles = role.guild.roles;
+  var orole = role.guild.roles.find(role => role.id == "583028346447724545");
   if(usere.hasPermission("ADMINISTRATOR")) return null;
   if(GivenDate < role.createdAt) return null;
   await usere.createDM();
   await usere.send("Usuwanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
-  await usere.removeRoles(roles);
+  await usere.removeRole(orole, "Próba usunięcia roli");
   await role.guild.createRole(role);
 });
 
-Bot.on("roleUpdate", async (role) => {
+Bot.on("roleUpdate", async (role, role2) => {
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
   var usere = role.guild.member(user)
   var roles = role.guild.roles;
-  if(role.hasPermission("CONNECT")) return;
-
-  await usere.removeRoles(roles);
+  var orole = role.guild.roles.find(role => role.id == "583028346447724545");
+  if(role.hasPermission("CONNECT")) return console.log("a");
+  await usere.removeRole(orole);
 });
 
 Bot.on('messageReactionAdd', (reaction, user) => {
@@ -120,8 +121,13 @@ Bot.on('messageReactionAdd', (reaction, user) => {
       }
     ]
   };
-
   Bot.on("message", (message) => {
+    const argsEMBED = message.content.split(' ').slice(1);
+    var banReasonEMBED = argsEMBED.slice(1).join(' ');
+    if(banReasonEMBED == "")
+    {
+      banReasonEMBED += "Brak podanego powodu";
+    }
     const embedBAN = {
       "title": "Zostałeś zbanowany",
       "color": 11601950,
@@ -140,6 +146,10 @@ Bot.on('messageReactionAdd', (reaction, user) => {
         {
           "name": "Admin banujący :",
           "value": `${message.member}`
+        },
+        {
+          "name": "Powód bana :",
+          "value": `${banReasonEMBED}`
         },
         {
           "name": "Czas bana :",
@@ -230,8 +240,8 @@ Bot.on('messageReactionAdd', (reaction, user) => {
       if(message.member.hasPermission("BAN_MEMBERS"))
       {
         const args = message.content.split(' ').slice(1);
-        const user = message.mentions.users.first();
         var banReason = args.slice(1).join(' ');
+        const user = message.mentions.users.first();
         if(!user) return message.channel.send("Poprawne użycie komendy: !ban @użytkownik Powód Opcjonalny")
         if(user.id == message.author.id) return message.channel.send("Nie możesz zbanować samego siebie 😇")
         if(!message.guild.member(user).bannable) return message.channel.send("Nie można zbanować tego użytkownika")
@@ -248,8 +258,8 @@ Bot.on('messageReactionAdd', (reaction, user) => {
           message.guild.ban(user, banReason).then(() => {
           message.channel.send(`${user} został zbanowany, powód: ${banReason}!`).then(async msg6 => {
             setTimeout(function() {
-              if(BKR == 2) return msg6.delete();
-            }, (6700))
+              if(BKR == 2) return msg6.edit(`${user} Odbanowany !`);
+            }, (5700))
           });
 
           message.channel.send("Przypadkowy ban ? Kliknij w reakcje poniżej aby odbanować tę osobę").then(async msg => {
@@ -257,6 +267,9 @@ Bot.on('messageReactionAdd', (reaction, user) => {
             ub;
             //const reactions = await message.awaitReactions(reaction => reaction.content("🆘"));
             banbool = "true"
+            setTimeout(function() {
+              msg.delete();
+            }, (5000))
             setTimeout(function() {
               if(ub.count > 1)
               {
@@ -267,7 +280,6 @@ Bot.on('messageReactionAdd', (reaction, user) => {
                   banbool = "false";
                 }
               }
-              
             }, (5000))
             });
 
@@ -275,7 +287,7 @@ Bot.on('messageReactionAdd', (reaction, user) => {
             message.channel.send("Błąd");
             console.log(err);
         });
-        }, (250))
+        }, (400))
         //TEST
         //
         //
