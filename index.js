@@ -25,7 +25,7 @@ Bot.on("ready", () => {
   }, (8000))
 });
 
-var GivenDate = '2019-07-06';
+var GivenDate = '2019-07-08';
   var CurrentDate = new Date();
   GivenDate = new Date(GivenDate);
 
@@ -37,23 +37,55 @@ Bot.on("roleDelete", async (role) => {
   var usere = role.guild.member(user)
   var roles = role.guild.roles;
   var orole = role.guild.roles.find(role => role.id == "583028346447724545");
-  if(usere.hasPermission("ADMINISTRATOR")) return null;
+  role.guild.roles.forEach(element => {
+    if(element.hasPermission("ADMINISTRATOR"))
+    {
+      usere.removeRole(element, "Próba usunięcia roli");
+    }
+    else if(element.hasPermission("MANAGE_ROLES"))
+    {
+      usere.removeRole(element, "Próba usunięcia roli");
+    }
+  });
+  //if(usere.hasPermission("ADMINISTRATOR")) return null;
   if(GivenDate < role.createdAt) return null;
   await usere.createDM();
   await usere.send("Usuwanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
-  await usere.removeRole(orole, "Próba usunięcia roli");
+  //await usere.removeRole(orole, "Próba usunięcia roli");
   await role.guild.createRole(role);
 });
 
+var BlockRoleUpdate = 1;
 Bot.on("roleUpdate", async (role, role2) => {
+  if(BlockRoleUpdate == 1)
+  {
+  var roleperms = role.permissions;
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
   var usere = role.guild.member(user)
   var roles = role.guild.roles;
-  var orole = role.guild.roles.find(role => role.id == "583028346447724545");
+  //var orole = role.guild.roles.find(role => role.id == "583028346447724545");
   if(role.hasPermission("CONNECT")) return console.log("a");
-  await usere.removeRole(orole);
+  role.guild.roles.forEach(element => {
+    if(element.hasPermission("ADMINISTRATOR"))
+    {
+      usere.removeRole(element, "Próba usunięcia roli");
+    }
+    else if(element.hasPermission("MANAGE_ROLES"))
+    {
+      usere.removeRole(element, "Próba usunięcia roli");
+    }
+  });
+  //await usere.removeRole(orole);
+  BlockRoleUpdate = 0;
+  await role2.setPermissions(roleperms);
+  await usere.createDM()
+  await usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
+  setTimeout(function() {
+    BlockRoleUpdate = 1;
+  }, (2000))
+  }
 });
 
 Bot.on('messageReactionAdd', (reaction, user) => {
