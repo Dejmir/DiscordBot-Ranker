@@ -81,8 +81,8 @@ Bot.on("roleUpdate", async (role, role2) => {
   //await usere.removeRole(orole);
   BlockRoleUpdate = 0;
   await role2.setPermissions(roleperms);
-  await usere.createDM()
-  await usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
+  //await usere.createDM()
+  //await usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
   setTimeout(function() {
     BlockRoleUpdate = 1;
   }, (2000))
