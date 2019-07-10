@@ -25,7 +25,7 @@ Bot.on("ready", () => {
   }, (8000))
 });
 
-var GivenDate = '2019-07-08';
+var GivenDate = '2019-07-09';
   var CurrentDate = new Date();
   GivenDate = new Date(GivenDate);
 
@@ -37,6 +37,7 @@ Bot.on("roleDelete", async (role) => {
   var usere = role.guild.member(user)
   var roles = role.guild.roles;
   var orole = role.guild.roles.find(role => role.id == "583028346447724545");
+  if(GivenDate < role.createdAt) return null;
   role.guild.roles.forEach(element => {
     if(element.hasPermission("ADMINISTRATOR"))
     {
@@ -48,7 +49,6 @@ Bot.on("roleDelete", async (role) => {
     }
   });
   //if(usere.hasPermission("ADMINISTRATOR")) return null;
-  if(GivenDate < role.createdAt) return null;
   await usere.createDM();
   await usere.send("Usuwanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
   //await usere.removeRole(orole, "Próba usunięcia roli");
@@ -59,6 +59,7 @@ var BlockRoleUpdate = 1;
 Bot.on("roleUpdate", async (role, role2) => {
   if(BlockRoleUpdate == 1)
   {
+    if(role.hasPermission("CONNECT")) return console.log("b");
   var roleperms = role.permissions;
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
@@ -70,11 +71,11 @@ Bot.on("roleUpdate", async (role, role2) => {
   role.guild.roles.forEach(element => {
     if(element.hasPermission("ADMINISTRATOR"))
     {
-      usere.removeRole(element, "Próba usunięcia roli");
+      usere.removeRole(element, "Próba edytowania roli");
     }
     else if(element.hasPermission("MANAGE_ROLES"))
     {
-      usere.removeRole(element, "Próba usunięcia roli");
+      usere.removeRole(element, "Próba edytowania roli");
     }
   });
   //await usere.removeRole(orole);
@@ -86,6 +87,28 @@ Bot.on("roleUpdate", async (role, role2) => {
     BlockRoleUpdate = 1;
   }, (2000))
   }
+});
+Bot.on("guildMemberUpdate", async (GuildMember) => {
+  const entry = await GuildMember.guild.fetchAuditLogs({type: "MEMBER_ROLE_UPDATE"}).then(audit => audit.entries.first())
+  let user = ""
+  user = entry.executor.id
+  var usere = GuildMember.guild.member(user)
+  var roles = GuildMember.guild.roles;
+  if(!GuildMember.hasPermission("MOVE_MEMBERS")) return;
+  if(usere.id == "596058033180639238") return;
+  if(usere.hasPermission("ADMINISTRATOR")) return;
+  GuildMember.guild.roles.forEach(element => {
+    if(element.hasPermission("MOVE_MEMBERS")){
+      GuildMember.removeRole(element);
+    }
+  });
+  usere.roles.forEach(element => {
+    if(element.hasPermission("MOVE_MEMBERS")){
+      usere.removeRole(element);
+    }
+  });
+  await usere.createDM();
+  await usere.send("Zakaz nadawania oraz zdejmowania rang administracji")
 });
 
 Bot.on('messageReactionAdd', (reaction, user) => {
@@ -124,7 +147,7 @@ Bot.on('messageReactionAdd', (reaction, user) => {
       },
       {
         "name": "Status ukończenia bota",
-        "value": "36% (W przybliżeniu)"
+        "value": "45% (W przybliżeniu)"
       }
     ]
   };
@@ -154,6 +177,7 @@ Bot.on('messageReactionAdd', (reaction, user) => {
     ]
   };
   Bot.on("message", (message) => {
+
     const argsEMBED = message.content.split(' ').slice(1);
     var banReasonEMBED = argsEMBED.slice(1).join(' ');
     if(banReasonEMBED == "")
