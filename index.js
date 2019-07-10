@@ -98,6 +98,7 @@ Bot.on("guildMemberUpdate", async (GuildMember) => {
   if(usere.id == "596058033180639238") return;
   if(usere.id == GuildMember.id) return;
   if(usere.hasPermission("ADMINISTRATOR")) return;
+  if(GuildMember.hasPermission("ADMINISTRATOR")) return;
   GuildMember.guild.roles.forEach(element => {
     if(element.hasPermission("MOVE_MEMBERS")){
       GuildMember.removeRole(element);
