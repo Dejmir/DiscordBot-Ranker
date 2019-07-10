@@ -59,15 +59,15 @@ var BlockRoleUpdate = 1;
 Bot.on("roleUpdate", async (role, role2) => {
   if(BlockRoleUpdate == 1)
   {
-    if(role.hasPermission("CONNECT")) return console.log("b");
+  if(role.hasPermission("CONNECT")) return null;
   var roleperms = role.permissions;
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
+  if(role.hasPermission("CONNECT")) return null;
   var usere = role.guild.member(user)
   var roles = role.guild.roles;
-  //var orole = role.guild.roles.find(role => role.id == "583028346447724545");
-  if(role.hasPermission("CONNECT")) return console.log("a");
+  var orole = role.guild.roles.find(role => role.id == "583028346447724545");
   role.guild.roles.forEach(element => {
     if(element.hasPermission("ADMINISTRATOR"))
     {
@@ -80,13 +80,13 @@ Bot.on("roleUpdate", async (role, role2) => {
   });
   //await usere.removeRole(orole);
   BlockRoleUpdate = 0;
-  await role2.setPermissions(roleperms);
-  //await usere.createDM()
-  //await usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
+  role2.setPermissions(roleperms);
+  usere.createDM()
+  usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
   setTimeout(function() {
     BlockRoleUpdate = 1;
   }, (2000))
-  }
+}
 });
 Bot.on("guildMemberUpdate", async (GuildMember) => {
   const entry = await GuildMember.guild.fetchAuditLogs({type: "MEMBER_ROLE_UPDATE"}).then(audit => audit.entries.first())
