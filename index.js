@@ -305,6 +305,7 @@ Bot.on('messageReactionAdd', (reaction, user) => {
         if(!message.guild.member(user).bannable) return message.channel.send("Nie można zbanować tego użytkownika")
         user.createDM();
         user.sendEmbed(embedBAN);
+        user.send("https://www.youtube.com/watch?v=PLteDgvYKIM");
         if(banReason == "")
         {
           banReason += "Brak podanego powodu";
