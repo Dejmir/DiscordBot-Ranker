@@ -384,8 +384,8 @@ Bot.on('messageReactionAdd', (reaction, user) => {
     {
       var authorr = message.member.id;
       //message.channel.send(authorr);
-      if(authorr == 335454224886267914)
-      {
+      //if(authorr == 335454224886267914)
+      //{
         message.channel.send("Select language ! in 5 sec").then(async msg => {
           var pl = await msg.react("🇵🇱");
           var us = await msg.react("🇺🇸");
@@ -421,7 +421,7 @@ Bot.on('messageReactionAdd', (reaction, user) => {
             
           }, (5200));
         })
-      }
+      //}
     }
     if(message.content.startsWith(prefix + "komendy"))
       {
