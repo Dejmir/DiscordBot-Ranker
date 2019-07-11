@@ -56,16 +56,28 @@ Bot.on("roleDelete", async (role) => {
 });
 
 var BlockRoleUpdate = 1;
+Bot.on("roleCreate", async (rolecreateo) => {
+  setTimeout(function() {
+  rolecreateo.setName("Stworzona rola", "Aktualizacja nowej roli");
+  BlockRoleUpdate = 0;
+  }, (250))
+  setTimeout(function() {
+    BlockRoleUpdate = 1;
+  }, (10000))
+});
+
 Bot.on("roleUpdate", async (role, role2) => {
   if(BlockRoleUpdate == 1)
   {
   if(role.hasPermission("CONNECT")) return null;
+  if(role.hasPermission("SPEAK")) return null;
   var roleperms = role.permissions;
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
   if(role.hasPermission("CONNECT")) return null;
   var usere = role.guild.member(user)
+  if(usere.id == "596058033180639238") return console.log("KURWA STOP!!!");
   var roles = role.guild.roles;
   var orole = role.guild.roles.find(role => role.id == "583028346447724545");
   role.guild.roles.forEach(element => {
@@ -88,27 +100,30 @@ Bot.on("roleUpdate", async (role, role2) => {
   }, (2000))
 }
 });
-Bot.on("guildMemberUpdate", async (GuildMember) => {
+
+Bot.on("guildMemberUpdate", async (GuildMember, gm) => {
   const entry = await GuildMember.guild.fetchAuditLogs({type: "MEMBER_ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
   var usere = GuildMember.guild.member(user)
   var roles = GuildMember.guild.roles;
-  if(!GuildMember.hasPermission("MOVE_MEMBERS")) return;
-  if(usere.id == "596058033180639238") return;
-  if(usere.id == GuildMember.id) return;
-  if(usere.hasPermission("ADMINISTRATOR")) return;
-  if(GuildMember.hasPermission("ADMINISTRATOR")) return;
-  GuildMember.guild.roles.forEach(element => {
+  var currentmember = gm;
+  if(!currentmember.hasPermission("MOVE_MEMBERS")) return console.log("a");
+  if(usere.id == "596058033180639238") return console.log("b");
+  if(usere.hasPermission("ADMINISTRATOR")) return console.log("c");
+  if(usere.id == GuildMember.id) return console.log("d");
+  if(currentmember.hasPermission("ADMINISTRATOR")) return console.log("e");
+  currentmember.guild.roles.forEach(element => {
     if(element.hasPermission("MOVE_MEMBERS")){
-      GuildMember.removeRole(element);
+      currentmember.removeRole(element);
     }
   });
-  usere.roles.forEach(element => {
+  usere.guild.roles.forEach(element => {
     if(element.hasPermission("MOVE_MEMBERS")){
       usere.removeRole(element);
     }
   });
+  //if(!GuildMember.hasPermission("MOVE_MEMBERS")) return console.log("a");
   await usere.createDM();
   await usere.send("Zakaz nadawania oraz zdejmowania rang administracji")
 });
