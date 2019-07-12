@@ -108,6 +108,7 @@ Bot.on("guildMemberUpdate", async (GuildMember, gm) => {
   var usere = GuildMember.guild.member(user)
   var roles = GuildMember.guild.roles;
   var currentmember = gm;
+  if(GuildMember.hasPermission("MOVE_MEMBERS")) return console.log("0");
   if(!currentmember.hasPermission("MOVE_MEMBERS")) return console.log("a");
   if(usere.id == "596058033180639238") return console.log("b");
   if(usere.hasPermission("ADMINISTRATOR")) return console.log("c");
