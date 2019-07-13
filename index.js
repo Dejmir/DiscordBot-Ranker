@@ -59,35 +59,36 @@ var BlockRoleUpdate = 1;
 Bot.on("roleCreate", async (rolecreateo) => {
   setTimeout(function() {
   rolecreateo.setName("Stworzona rola", "Aktualizacja nowej roli");
-  BlockRoleUpdate = 0;
+  //BlockRoleUpdate = 0;
   }, (250))
-  setTimeout(function() {
-    BlockRoleUpdate = 1;
-  }, (10000))
+  //setTimeout(function() {
+    //BlockRoleUpdate = 1;
+  //}, (10000))
 });
 
 Bot.on("roleUpdate", async (role, role2) => {
+  if(role2.position > 15) return null;
   if(BlockRoleUpdate == 1)
   {
   if(role.hasPermission("CONNECT")) return null;
-  if(role.hasPermission("SPEAK")) return null;
   var roleperms = role.permissions;
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
+  if(role2.hasPermission("CONNECT")) return null;
   if(role.hasPermission("CONNECT")) return null;
-  var usere = role.guild.member(user)
+  usere = role.guild.member(user)
   if(usere.id == "596058033180639238") return console.log("KURWA STOP!!!");
   var roles = role.guild.roles;
   var orole = role.guild.roles.find(role => role.id == "583028346447724545");
   role.guild.roles.forEach(element => {
     if(element.hasPermission("ADMINISTRATOR"))
     {
-      usere.removeRole(element, "Próba edytowania roli");
+        usere.removeRole(element, "Próba edytowania roli");
     }
     else if(element.hasPermission("MANAGE_ROLES"))
     {
-      usere.removeRole(element, "Próba edytowania roli");
+        usere.removeRole(element, "Próba edytowania roli");
     }
   });
   //await usere.removeRole(orole);
@@ -97,7 +98,7 @@ Bot.on("roleUpdate", async (role, role2) => {
   usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
   setTimeout(function() {
     BlockRoleUpdate = 1;
-  }, (2000))
+  }, (175))
 }
 });
 
@@ -455,6 +456,18 @@ Bot.on('messageReactionAdd', (reaction, user) => {
         //console.log(element);
         message.guild.member(element).setVoiceChannel(`${targetch}`);
       });
+
+    }
+    if(message.content.startsWith(prefix + "botrestart"))
+    {
+      if(message.member.id == "335454224886267914")
+      {
+        message.channel.send("Resetowanie bota...");
+        Bot.destroy().then(Bot.login(process.env.token));
+      }
+      else{
+        message.channel.send("Tylko właściciel bota może użyć tej komendy");
+      }
 
     }
 });
