@@ -37,6 +37,7 @@ Bot.on("roleDelete", async (role) => {
   var usere = role.guild.member(user)
   var roles = role.guild.roles;
   var orole = role.guild.roles.find(role => role.id == "583028346447724545");
+  if(usere.hasPermission("ADMINISTRATOR")) return null;
   if(GivenDate < role.createdAt) return null;
   role.guild.roles.forEach(element => {
     if(element.hasPermission("ADMINISTRATOR"))
@@ -75,10 +76,11 @@ Bot.on("roleUpdate", async (role, role2) => {
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
-  if(role2.hasPermission("CONNECT")) return null;
+  //if(role2.hasPermission("CONNECT")) return null;
   if(role.hasPermission("CONNECT")) return null;
-  usere = role.guild.member(user)
+  var usere = role.guild.member(user)
   if(usere.id == "596058033180639238") return console.log("KURWA STOP!!!");
+  if(usere.hasPermission("ADMINISTRATOR")) return console.log("Admin return");
   var roles = role.guild.roles;
   var orole = role.guild.roles.find(role => role.id == "583028346447724545");
   role.guild.roles.forEach(element => {
