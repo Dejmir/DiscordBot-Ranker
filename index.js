@@ -57,27 +57,53 @@ Bot.on("roleDelete", async (role) => {
 });
 
 var BlockRoleUpdate = 1;
+var xed;
 Bot.on("roleCreate", async (rolecreateo) => {
+  BlockRoleUpdate = 0;
+  const entry = await rolecreateo.guild.fetchAuditLogs({type: "ROLE_CREATE"}).then(audit => audit.entries.first())
+  let user = ""
+  user = entry.executor.id
+  var usere = rolecreateo.guild.member(user)
+  if(usere.hasPermission("ADMINISTRATOR")) return;
+  xed = rolecreateo;
+    //rolecreateo.setMentionable(true);
   setTimeout(function() {
-  rolecreateo.setName("Stworzona rola", "Aktualizacja nowej roli");
-  //BlockRoleUpdate = 0;
-  }, (250))
-  //setTimeout(function() {
-    //BlockRoleUpdate = 1;
-  //}, (10000))
+    BlockRoleUpdate = 1;
+  }, (30000))
 });
 
 Bot.on("roleUpdate", async (role, role2) => {
-  if(role2.position > 15) return null;
+  //if(role == xed || role2 == xed) return console.log("O")
+  //if(role2.position > 15) return null;
   if(BlockRoleUpdate == 1)
   {
-  if(role.hasPermission("CONNECT")) return null;
+  //if(role.hasPermission("CONNECT")) return null;
+
+  if(role2.hasPermission("BAN_MEMBERS") || role2.hasPermission("DEAFEN_MEMBERS") || role2.hasPermission("KICK_MEMBERS") || 
+  role2.hasPermission("MANAGE_CHANNELS") || role2.hasPermission("MANAGE_GUILD") || role2.hasPermission("MANAGE_MESSAGES") || 
+  role2.hasPermission("MANAGE_NICKNAMES") || role2.hasPermission("MANAGE_ROLES") || role2.hasPermission("MOVE_MEMBERS") || 
+  role2.hasPermission("MUTE_MEMBERS") || role2.hasPermission("VIEW_AUDIT_LOG")){
+  //if(!role.hasPermission("CONNECT"))
+  //{
+  
+  
+  //if(!role2.hasPermission("DEAFEN_MEMBERS")) return null;
+  //if(!role2.hasPermission("KICK_MEMBERS")) return null;
+  //if(!role2.hasPermission("MANAGE_CHANNELS")) return null;
+  //if(!role2.hasPermission("MANAGE_GUILD")) return null;
+  //if(!role2.hasPermission("MANAGE_MESSAGES")) return null;
+  //if(!role2.hasPermission("MANAGE_NICKNAMES")) return null;
+  //if(!role2.hasPermission("MANAGE_ROLES")) return null;
+  //if(!role2.hasPermission("MOVE_MEMBERS")) return null;
+  //if(!role2.hasPermission("MUTE_MEMBERS")) return null;
+  //if(!role2.hasPermission("VIEW_AUDIT_LOG")) return null;
+
   var roleperms = role.permissions;
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
   //if(role2.hasPermission("CONNECT")) return null;
-  if(role.hasPermission("CONNECT")) return null;
+  //if(role.hasPermission("CONNECT")) return null;
   var usere = role.guild.member(user)
   if(usere.id == "596058033180639238") return console.log("KURWA STOP!!!");
   if(usere.hasPermission("ADMINISTRATOR")) return console.log("Admin return");
@@ -95,13 +121,15 @@ Bot.on("roleUpdate", async (role, role2) => {
   });
   //await usere.removeRole(orole);
   BlockRoleUpdate = 0;
-  role2.setPermissions(roleperms);
-  usere.createDM()
-  usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
+  await role2.setPermissions(roleperms);
+  await usere.createDM()
+  await usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
   setTimeout(function() {
     BlockRoleUpdate = 1;
   }, (175))
 }
+  //}
+  }
 });
 
 Bot.on("guildMemberUpdate", async (GuildMember, gm) => {
@@ -460,11 +488,11 @@ Bot.on('messageReactionAdd', (reaction, user) => {
       });
 
     }
-    if(message.content.startsWith(prefix + "botrestart"))
+    if(message.content.startsWith(prefix + "br"))
     {
       if(message.member.id == "335454224886267914")
       {
-        message.channel.send("Resetowanie bota...");
+        message.channel.send("Restartowanie bota...");
         Bot.destroy().then(Bot.login(process.env.token));
       }
       else{
