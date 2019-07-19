@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const Bot = new Discord.Client();
+const Config = require("./settings.json");
 
-var prefix = "r!";
+var prefix = Config.prefix;
 var banbool = "false";
 var IDob = "text";
 var BKR = "1";
