@@ -25,7 +25,7 @@ Bot.on("ready", () => {
   }, (8000))
 });
 
-var GivenDate = '2019-07-09';
+var GivenDate = '2019-07-27';
   var CurrentDate = new Date();
   GivenDate = new Date(GivenDate);
 
@@ -64,6 +64,16 @@ Bot.on("roleCreate", async (rolecreateo) => {
   let user = ""
   user = entry.executor.id
   var usere = rolecreateo.guild.member(user)
+  
+  var rolepperms = rolecreateo.guild.roles.find(r => r.id == "604806994356076554");
+  if(usere.roles.find(r => r.id == "604806994356076554"))
+  {
+    BlockRoleUpdate = 1;
+    usere.createDM();
+    usere.sendMessage("Zakaz tworzenia rang.");
+    usere.removeRole(rolepperms);
+    rolecreateo.delete();
+  }
   if(usere.hasPermission("ADMINISTRATOR")) return;
   xed = rolecreateo;
     //rolecreateo.setMentionable(true);
@@ -72,7 +82,38 @@ Bot.on("roleCreate", async (rolecreateo) => {
   }, (30000))
 });
 
+Bot.on("roleUpdate", async (role3, role23) => {
+  var roleperms = role3.permissions;
+  var rolename = role3.name;
+  var rolecolor = role3.color;
+  var rolemention = role3.mentionable;
+  var roleishoisted = role3.hoist;
+  const entry2 = await role3.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
+  var user2 = ""
+  user2 = entry2.executor.id
+  var usere2 = role3.guild.member(user2)
+  var rolepperms = role3.guild.roles.find(r => r.id == "604806994356076554");
+  if(usere2.roles.find(r => r.id == "604806994356076554"))
+  {
+  await role23.setPermissions(roleperms);
+  await role23.setName(rolename);
+  await role23.setColor(rolecolor);
+  await role23.setMentionable(rolemention);
+  await role23.setHoist(roleishoisted);
+  usere2.createDM();
+  usere2.sendMessage("Zakaz edytowania rang.");
+  usere2.removeRole(rolepperms);
+  }
+})
+
 Bot.on("roleUpdate", async (role, role2) => {
+  const entry4 = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
+  let user4 = ""
+  user4 = entry4.executor.id
+  //if(role2.hasPermission("CONNECT")) return null;
+  //if(role.hasPermission("CONNECT")) return null;
+  var usere4 = role.guild.member(user4)
+  if(usere4.roles.find(r => r.id == "604806994356076554")) return console.log("zetka");
   //if(role == xed || role2 == xed) return console.log("O")
   //if(role2.position > 15) return null;
   if(BlockRoleUpdate == 1)
@@ -99,6 +140,10 @@ Bot.on("roleUpdate", async (role, role2) => {
   //if(!role2.hasPermission("VIEW_AUDIT_LOG")) return null;
 
   var roleperms = role.permissions;
+  var rolename = role.name;
+  var rolecolor = role.color;
+  var rolemention = role.mentionable;
+  var roleishoisted = role.hoist;
   const entry = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
@@ -122,6 +167,10 @@ Bot.on("roleUpdate", async (role, role2) => {
   //await usere.removeRole(orole);
   BlockRoleUpdate = 0;
   await role2.setPermissions(roleperms);
+  await role2.setName(rolename);
+  await role2.setColor(rolecolor);
+  await role2.setMentionable(rolemention);
+  await role2.setHoist(roleishoisted);
   await usere.createDM()
   await usere.send("Edytowanie nie swoich ról jest zabronione, została tobie zdjęta ranga administratora");
   setTimeout(function() {
