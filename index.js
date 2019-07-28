@@ -65,8 +65,8 @@ Bot.on("roleCreate", async (rolecreateo) => {
   user = entry.executor.id
   var usere = rolecreateo.guild.member(user)
   
-  var rolepperms = rolecreateo.guild.roles.find(r => r.id == "604806994356076554");
-  if(usere.roles.find(r => r.id == "604806994356076554"))
+  var rolepperms = rolecreateo.guild.roles.find(r => r.id == "604763840965509120");
+  if(usere.roles.find(r => r.id == "604763840965509120"))
   {
     BlockRoleUpdate = 1;
     usere.createDM();
@@ -92,8 +92,8 @@ Bot.on("roleUpdate", async (role3, role23) => {
   var user2 = ""
   user2 = entry2.executor.id
   var usere2 = role3.guild.member(user2)
-  var rolepperms = role3.guild.roles.find(r => r.id == "604806994356076554");
-  if(usere2.roles.find(r => r.id == "604806994356076554"))
+  var rolepperms = role3.guild.roles.find(r => r.id == "604763840965509120");
+  if(usere2.roles.find(r => r.id == "604763840965509120"))
   {
   await role23.setPermissions(roleperms);
   await role23.setName(rolename);
@@ -113,7 +113,7 @@ Bot.on("roleUpdate", async (role, role2) => {
   //if(role2.hasPermission("CONNECT")) return null;
   //if(role.hasPermission("CONNECT")) return null;
   var usere4 = role.guild.member(user4)
-  if(usere4.roles.find(r => r.id == "604806994356076554")) return console.log("zetka");
+  if(usere4.roles.find(r => r.id == "604763840965509120")) return console.log("zetka");
   //if(role == xed || role2 == xed) return console.log("O")
   //if(role2.position > 15) return null;
   if(BlockRoleUpdate == 1)
