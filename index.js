@@ -59,7 +59,7 @@ Bot.on("roleDelete", async (role) => {
 var BlockRoleUpdate = 1;
 var xed;
 Bot.on("roleCreate", async (rolecreateo) => {
-  BlockRoleUpdate = 0;
+  //BlockRoleUpdate = 0;
   const entry = await rolecreateo.guild.fetchAuditLogs({type: "ROLE_CREATE"}).then(audit => audit.entries.first())
   let user = ""
   user = entry.executor.id
@@ -68,7 +68,7 @@ Bot.on("roleCreate", async (rolecreateo) => {
   var rolepperms = rolecreateo.guild.roles.find(r => r.id == "604763840965509120");
   if(usere.roles.find(r => r.id == "604763840965509120"))
   {
-    BlockRoleUpdate = 1;
+    //BlockRoleUpdate = 1;
     usere.createDM();
     usere.sendMessage("Zakaz tworzenia rang.");
     usere.removeRole(rolepperms);
@@ -77,9 +77,11 @@ Bot.on("roleCreate", async (rolecreateo) => {
   if(usere.hasPermission("ADMINISTRATOR")) return;
   xed = rolecreateo;
     //rolecreateo.setMentionable(true);
-  setTimeout(function() {
-    BlockRoleUpdate = 1;
-  }, (30000))
+  //setTimeout(function() {
+    //BlockRoleUpdate = 1;
+  //}, (30000))
+  //rolecreateo = undefined;
+  //usere = undefined;
 });
 
 Bot.on("roleUpdate", async (role3, role23) => {
@@ -104,7 +106,7 @@ Bot.on("roleUpdate", async (role3, role23) => {
   usere2.sendMessage("Zakaz edytowania rang.");
   usere2.removeRole(rolepperms);
   }
-})
+});
 
 Bot.on("roleUpdate", async (role, role2) => {
   const entry4 = await role.guild.fetchAuditLogs({type: "ROLE_UPDATE"}).then(audit => audit.entries.first())
@@ -116,7 +118,7 @@ Bot.on("roleUpdate", async (role, role2) => {
   if(usere4.roles.find(r => r.id == "604763840965509120")) return console.log("zetka");
   //if(role == xed || role2 == xed) return console.log("O")
   //if(role2.position > 15) return null;
-  if(BlockRoleUpdate == 1)
+  if(BlockRoleUpdate == 999)
   {
   //if(role.hasPermission("CONNECT")) return null;
 
@@ -126,18 +128,6 @@ Bot.on("roleUpdate", async (role, role2) => {
   role2.hasPermission("MUTE_MEMBERS") || role2.hasPermission("VIEW_AUDIT_LOG")){
   //if(!role.hasPermission("CONNECT"))
   //{
-  
-  
-  //if(!role2.hasPermission("DEAFEN_MEMBERS")) return null;
-  //if(!role2.hasPermission("KICK_MEMBERS")) return null;
-  //if(!role2.hasPermission("MANAGE_CHANNELS")) return null;
-  //if(!role2.hasPermission("MANAGE_GUILD")) return null;
-  //if(!role2.hasPermission("MANAGE_MESSAGES")) return null;
-  //if(!role2.hasPermission("MANAGE_NICKNAMES")) return null;
-  //if(!role2.hasPermission("MANAGE_ROLES")) return null;
-  //if(!role2.hasPermission("MOVE_MEMBERS")) return null;
-  //if(!role2.hasPermission("MUTE_MEMBERS")) return null;
-  //if(!role2.hasPermission("VIEW_AUDIT_LOG")) return null;
 
   var roleperms = role.permissions;
   var rolename = role.name;
@@ -179,6 +169,10 @@ Bot.on("roleUpdate", async (role, role2) => {
 }
   //}
   }
+  usere4 = undefined;
+  usere = undefined;
+  role = undefined;
+  role2 = undefined;
 });
 
 Bot.on("guildMemberUpdate", async (GuildMember, gm) => {
@@ -188,6 +182,18 @@ Bot.on("guildMemberUpdate", async (GuildMember, gm) => {
   var usere = GuildMember.guild.member(user)
   var roles = GuildMember.guild.roles;
   var currentmember = gm;
+
+  if(usere.id == "483883711633555457")
+  {
+    var x13 = gm.guild.roles.find(role => role.id == "596693394257084425");
+    var x14 = gm.guild.roles.find(role => role.id == "593940822437920769");
+    if(!usere.roles.find(role => role.id == "604806994356076554"))
+    {
+      usere.addRole(x13);
+      usere.removeRole(x14);
+    }
+  }
+
   if(GuildMember.hasPermission("MOVE_MEMBERS")) return console.log("0");
   if(!currentmember.hasPermission("MOVE_MEMBERS")) return console.log("a");
   if(usere.id == "596058033180639238") return console.log("b");
@@ -271,6 +277,10 @@ Bot.on('messageReactionAdd', (reaction, user) => {
       {
         "name": "r!idban",
         "value": "Użycie : r!idban 123456789012345678"
+      },
+      {
+      "name": "r!move",
+      "value": "Użycie r!move 123456789012345678"
       }
     ]
   };
@@ -342,15 +352,15 @@ Bot.on('messageReactionAdd', (reaction, user) => {
         }
         let time = args[1]
         
-        if(!userR) return message.channel.send("Nie znaleziono takiego użytkownika");
-        if(!rank) return message.channel.send("Błąd");
-        if(!time) return message.channel.send("Błąd");
+        if(!userR) return message.channel.send("Nie znaleziono użytkownika");
+        if(!rank) return message.channel.send("Nie znaleziono rangi");
+        if(!time) return message.channel.send("Nieprawidłowy czas");
         var vtime = time;
         time = time * 60000;
 
         var role = message.guild.roles.find("name", rank);
         role;
-        if(!role) return message.channel.send("Błąd")
+        if(!role) return message.channel.send("Nie znaleziono takiej rangi")
 
         if(userR.roles.has(role.id))
         {
